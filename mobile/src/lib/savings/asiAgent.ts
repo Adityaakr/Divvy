@@ -79,7 +79,7 @@ class ASIAgent {
       tvl: 1250000,
       riskLevel: 'LOW',
       contractAddress: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',
-      description: 'Lending PYUSD on Aave V3 Base Sepolia',
+      description: 'Lending PYUSD on Aave V3 Ethereum Sepolia',
     },
     {
       protocol: 'Compound V3',

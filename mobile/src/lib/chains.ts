@@ -1,24 +1,18 @@
 import Constants from 'expo-constants';
 
 export const BLOCKSCOUT = {
-  baseUrl: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_BASE || 'https://arbitrum-sepolia.blockscout.com',
-  api: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_API || 'https://arbitrum-sepolia.blockscout.com/api/v2',
-  chainName: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_CHAIN_NAME || 'Arbitrum Sepolia',
+  baseUrl: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_BASE || 'https://eth-sepolia.blockscout.com',
+  api: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_API || 'https://eth-sepolia.blockscout.com/api/v2',
+  chainName: Constants.expoConfig?.extra?.EXPO_PUBLIC_BLOCKSCOUT_CHAIN_NAME || 'Ethereum Sepolia',
   apiBase: Constants.expoConfig?.extra?.EXPO_PUBLIC_API_BASE || 'http://localhost:3001',
 } as const;
 
 export const CHAIN_CONFIG = {
-  'arbitrum-sepolia': {
-    id: 421614,
-    name: 'Arbitrum Sepolia',
-    blockscout: 'https://arbitrum-sepolia.blockscout.com',
-    rpc: 'https://sepolia-rollup.arbitrum.io/rpc',
-  },
-  'base-sepolia': {
-    id: 84532,
-    name: 'Base Sepolia',
-    blockscout: 'https://base-sepolia.blockscout.com',
-    rpc: 'https://sepolia.base.org',
+  'ethereum-sepolia': {
+    id: 11155111,
+    name: 'Ethereum Sepolia',
+    blockscout: 'https://eth-sepolia.blockscout.com',
+    rpc: 'https://sepolia.infura.io/v3/your_infura_key_here',
   },
   'polygon': {
     id: 137,

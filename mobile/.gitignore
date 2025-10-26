@@ -31,7 +31,7 @@ yarn-error.*
 *.pem
 
 # Environment files and sensitive credentials
-.env
+
 .env.local
 .env.development
 .env.production

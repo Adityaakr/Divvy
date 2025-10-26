@@ -48,7 +48,7 @@ A comprehensive mobile-first React Native app built with Expo for splitting bill
 
 ### 💸 **Receive Screen**
 - Dynamic QR code generation
-- Network selection (Base Sepolia, Polygon, Ethereum)
+- Network selection (Ethereum Sepolia, Polygon, Ethereum)
 - Optional amount and memo
 - Address sharing and copying
 - EIP-681 standard support
@@ -95,7 +95,7 @@ A comprehensive mobile-first React Native app built with Expo for splitting bill
 - **ClearNode** WebSocket integration
 - **Blockscout API** for blockchain data
 - **EIP-681** payment request standard
-- **Multi-chain support** (Base Sepolia, Polygon, Ethereum)
+- **Multi-chain support** (Ethereum Sepolia, Polygon, Ethereum)
 
 ### **AI & Analytics**
 - **ASI Agent** for yield optimization
@@ -229,7 +229,7 @@ mobile/
 
 ## 🌐 Multi-Chain Support
 
-- **Base Sepolia**: Primary testnet for development
+- **Ethereum Sepolia**: Primary testnet for development
 - **Polygon**: Production-ready with lower fees
 - **Ethereum Mainnet**: Full compatibility
 - **Cross-chain Bridging**: Planned with LayerZero integration
@@ -384,7 +384,7 @@ A React Native/Expo mobile application for decentralized bill splitting with Web
 ### 💸 **Bill Splitting & Payments**
 - **Smart expense splitting** with multiple participants
 - **QR code payments** for instant settlements
-- **PYUSD integration** on Arbitrum Sepolia
+- **PYUSD integration** on Ethereum Sepolia
 - **Real-time split calculations** with gas estimation
 
 ### 🤖 **AI-Powered DeFi**
@@ -393,7 +393,7 @@ A React Native/Expo mobile application for decentralized bill splitting with Web
 - **Automated risk management** with configurable preferences
 
 ### 🌐 **Blockchain Integration**
-- **Arbitrum Sepolia** network support for PYUSD
+- **Ethereum Sepolia** network support for PYUSD
 - **Blockscout SDK** for live blockchain data
 - **Multi-chain compatibility** ready
 - **Real-time transaction monitoring**
@@ -456,12 +456,12 @@ Copy `.env.example` to `.env` and configure:
 
 ```bash
 # Blockchain Network
-EXPO_PUBLIC_CHAIN_ID=421614
-EXPO_PUBLIC_ARBITRUM_SEPOLIA_RPC=https://sepolia-rollup.arbitrum.io/rpc
+EXPO_PUBLIC_CHAIN_ID=11155111
+EXPO_PUBLIC_ETHEREUM_SEPOLIA_RPC=https://sepolia.infura.io/v3/your_infura_key_here
 
 # Blockscout Integration
-EXPO_PUBLIC_BLOCKSCOUT_BASE=https://arbitrum-sepolia.blockscout.com
-EXPO_PUBLIC_BLOCKSCOUT_API=https://arbitrum-sepolia.blockscout.com/api/v2
+EXPO_PUBLIC_BLOCKSCOUT_BASE=https://eth-sepolia.blockscout.com
+EXPO_PUBLIC_BLOCKSCOUT_API=https://eth-sepolia.blockscout.com/api/v2
 
 # Add your API keys and private keys (never commit these!)
 ```
@@ -523,8 +523,8 @@ MIT License - see LICENSE file for details
 ## 🔗 Links
 
 - **Repository:** https://github.com/Adityaakr/Divvy
-- **Blockscout:** https://arbitrum-sepolia.blockscout.com
-- **Arbitrum Sepolia:** https://sepolia-rollup.arbitrum.io/rpc
+- **Blockscout:** https://eth-sepolia.blockscout.com
+- **Ethereum Sepolia:** https://sepolia.infura.io/v3/your_infura_key_here
 
 ---
 

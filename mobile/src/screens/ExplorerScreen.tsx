@@ -17,7 +17,7 @@ export default function ExplorerScreen({ navigation }: any) {
   const [blockData, setBlockData] = useState<any>(null);
   const [recentTxs, setRecentTxs] = useState<any[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedNetwork, setSelectedNetwork] = useState('base-sepolia');
+  const [selectedNetwork, setSelectedNetwork] = useState('ethereum-sepolia');
   const [stats, setStats] = useState({
     txVolume24h: 1250000,
     avgClaimTime: 45,
@@ -26,7 +26,7 @@ export default function ExplorerScreen({ navigation }: any) {
   });
 
   const networks = [
-    { id: 'base-sepolia', name: 'Base Sepolia', color: '#007AFF' },
+    { id: 'ethereum-sepolia', name: 'Ethereum Sepolia', color: '#007AFF' },
     { id: 'polygon', name: 'Polygon', color: '#8B5CF6' },
     { id: 'mainnet', name: 'Ethereum', color: '#627EEA' },
   ];

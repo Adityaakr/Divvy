@@ -1,35 +1,21 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Share,
-  Clipboard,
-} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Share } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import QRCode from 'react-native-qrcode-svg';
-// Removed Privy dependency for clean demo
+import { useSmartWallet } from '../lib/smartwallet/SmartWalletProvider';
+import * as Clipboard from 'expo-clipboard';
 import { authHelpers } from '../lib/auth/privyClient';
 import { generateReceiveQR, generatePaymentLink } from '../lib/payments/qrUtils';
 
 export default function ReceiveScreen({ navigation }: any) {
-  // Mock user for demo
-  const user = {
-    wallet: { address: '0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4' },
-    linked_accounts: [
-      { type: 'wallet', address: '0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4' }
-    ]
-  };
+  const { account } = useSmartWallet();
   const [amount, setAmount] = useState('');
   const [memo, setMemo] = useState('');
   const [token, setToken] = useState('PYUSD');
-  const [network, setNetwork] = useState('Base Sepolia');
+  const [network, setNetwork] = useState('Ethereum Sepolia');
 
-  const connectedAddress = authHelpers.getPrimaryAddress(user);
+  const connectedAddress = account?.address;
 
   if (!connectedAddress) {
     return (
@@ -54,8 +40,10 @@ export default function ReceiveScreen({ navigation }: any) {
   };
 
   const handleCopyAddress = async () => {
-    await Clipboard.setString(connectedAddress);
-    Alert.alert('Copied!', 'Address copied to clipboard');
+    if (connectedAddress) {
+      await Clipboard.setStringAsync(connectedAddress);
+      Alert.alert('Copied!', 'Address copied to clipboard');
+    }
   };
 
   const handleShare = async () => {

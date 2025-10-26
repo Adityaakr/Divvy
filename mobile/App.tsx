@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,6 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SmartWalletProvider, useSmartWallet } from './src/lib/smartwallet/SmartWalletProvider';
+import BiometricLoginButton from './src/components/BiometricLoginButton';
+import CompactWalletDropdown from './src/components/CompactWalletDropdown';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -20,14 +24,15 @@ import EnhancedSavingsScreen from './src/screens/EnhancedSavingsScreen';
 import CopilotScreenDemo from './src/screens/CopilotScreenDemo';
 import MiniExplorerScreen from './src/screens/MiniExplorerScreen';
 
-// Beautiful home screen with better design
+// Beautiful home screen with smart wallet integration
 function HomeScreen({ navigation }: any) {
-  // Mock user data for demo
-  const mockUser = {
-    address: '0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4',
-    email: 'demo@divvy.app',
-    displayName: 'Demo User',
-    balance: '1,234.56'
+  const { account, isAuthenticated, logout } = useSmartWallet();
+  
+  // Use REAL smart wallet data - no mock fallbacks
+  const userData = {
+    address: account?.address || '',
+    displayName: account ? 'Smart Wallet' : 'Demo User',
+    balance: '1,234.56', // This will be real balance from blockchain later
   };
 
   return (
@@ -40,25 +45,32 @@ function HomeScreen({ navigation }: any) {
           </View>
           <View style={styles.userDetails}>
             <Text style={styles.greeting}>Good afternoon</Text>
-            <Text style={styles.userName}>{mockUser.displayName}</Text>
+            <Text style={styles.userName}>{userData.displayName}</Text>
           </View>
         </View>
         <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.loginButton}>
-            <Ionicons name="log-in-outline" size={20} color="#007AFF" />
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.notificationButton}>
-            <Ionicons name="notifications-outline" size={24} color="#1F2937" />
-          </TouchableOpacity>
+          {/* Smart Wallet - Compact or Login */}
+          {!account ? (
+            <View style={styles.professionalLoginButton}>
+              <BiometricLoginButton />
+            </View>
+          ) : (
+            <CompactWalletDropdown />
+          )}
         </View>
       </View>
 
-      {/* Balance Card */}
-      <View style={styles.balanceCard}>
+      {/* Scrollable Content */}
+      <ScrollView 
+        style={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        {/* Balance Card */}
+        <View style={styles.balanceCard}>
         <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>${mockUser.balance}</Text>
-        <Text style={styles.balanceSubtext}>PYUSD • Arbitrum Sepolia</Text>
+        <Text style={styles.balanceAmount}>${userData.balance}</Text>
+        <Text style={styles.balanceSubtext}>PYUSD • Ethereum Sepolia</Text>
         
         <View style={styles.quickActions}>
           <TouchableOpacity 
@@ -134,10 +146,12 @@ function HomeScreen({ navigation }: any) {
         </TouchableOpacity>
       </View>
 
-      {/* App Info */}
-      <View style={styles.appInfo}>
-        <Text style={styles.appTagline}>Split bills seamlessly, settle with PYUSD, and optimize yields via AI agents across chains</Text>
-      </View>
+
+        {/* App Info */}
+        <View style={styles.appInfo}>
+          <Text style={styles.appTagline}>Split bills seamlessly, settle with PYUSD, and optimize yields via AI agents across chains</Text>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -316,7 +330,7 @@ function AddExpenseScreen({ navigation }: any) {
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Network:</Text>
-              <Text style={styles.summaryValue}>Arbitrum Sepolia</Text>
+              <Text style={styles.summaryValue}>Ethereum Sepolia</Text>
             </View>
           </View>
         )}
@@ -358,7 +372,7 @@ function SettingsScreen() {
         <Text style={styles.settingsValue}>0x742d...8D4</Text>
         
         <Text style={styles.settingsLabel}>Network:</Text>
-        <Text style={styles.settingsValue}>Base Sepolia</Text>
+        <Text style={styles.settingsValue}>Ethereum Sepolia</Text>
       </View>
     </View>
   );
@@ -400,41 +414,43 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen 
-              name="Main" 
-              component={TabNavigator} 
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="Receive" 
-              component={ReceiveScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="PaymentRequest" 
-              component={PaymentRequestScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="Savings" 
-              component={EnhancedSavingsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="Copilot" 
-              component={CopilotScreenDemo}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-              name="Explorer" 
-              component={MiniExplorerScreen}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-        <StatusBar style="auto" />
+        <SmartWalletProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen 
+                name="Main" 
+                component={TabNavigator} 
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="Receive" 
+                component={ReceiveScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="PaymentRequest" 
+                component={PaymentRequestScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="Savings" 
+                component={EnhancedSavingsScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="Copilot" 
+                component={CopilotScreenDemo}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen 
+                name="Explorer" 
+                component={MiniExplorerScreen}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <StatusBar style="auto" />
+        </SmartWalletProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
   );
@@ -849,5 +865,190 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  // Smart Wallet Status Styles
+  smartWalletStatus: {
+    alignItems: 'flex-end',
+    marginRight: 12,
+  },
+  walletIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 6,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  walletAddressText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#6B7280',
+    fontFamily: 'monospace',
+  },
+  loginSection: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  loginPrompt: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#374151',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  headerWalletButton: {
+    marginRight: 12,
+    transform: [{ scale: 0.8 }], // Make it smaller for header
+  },
+  professionalLoginButton: {
+    // Clean container for login button
+  },
+  walletConnectedButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 8,
+  },
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  walletButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  // Wallet Details Card Styles
+  walletDetailsCard: {
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 20,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  walletHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  walletTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+  walletStatusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  walletStatusText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  walletAddressSection: {
+    marginBottom: 16,
+  },
+  walletAddressLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#6B7280',
+    marginBottom: 8,
+  },
+  addressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F9FAFB',
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  walletAddressFull: {
+    flex: 1,
+    fontSize: 12,
+    fontFamily: 'monospace',
+    color: '#374151',
+  },
+  copyButton: {
+    padding: 4,
+    marginLeft: 8,
+  },
+  walletActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  qrButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0F8FF',
+    padding: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  qrButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#007AFF',
+  },
+  detailsButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0F8FF',
+    padding: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  detailsButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#007AFF',
+  },
+  copyButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#007AFF',
+  },
+  logoutButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FEF2F2',
+    padding: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  logoutButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#EF4444',
+  },
+  // ScrollView Styles
+  scrollContent: {
+    flex: 1,
+  },
+  scrollContainer: {
+    paddingBottom: 20,
   },
 });

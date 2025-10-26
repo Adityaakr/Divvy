@@ -158,7 +158,7 @@ function SettingsScreen() {
         <Text style={styles.settingsValue}>0x742d...8D4</Text>
         
         <Text style={styles.settingsLabel}>Network:</Text>
-        <Text style={styles.settingsValue}>Base Sepolia</Text>
+        <Text style={styles.settingsValue}>Ethereum Sepolia</Text>
       </View>
     </View>
   );
