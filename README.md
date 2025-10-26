@@ -1,4 +1,4 @@
-# 🚀 Divvy - Complete DeFi Bill Splitting Platform
+# Divvy - Complete DeFi Bill Splitting Platform
 
 **Split bills seamlessly, settle with PYUSD, and optimize yields via AI agents across chains**
 
