@@ -1,6 +1,9 @@
 # Divvy - Complete DeFi Bill Splitting Platform
 
 **Split bills seamlessly, settle with PYUSD, and optimize yields via AI agents across chains**
+![2025-10-26 21 28 25](https://github.com/user-attachments/assets/a6b75cf4-363c-42e8-8c74-9e70148382df)
+![2025-10-26 21 28 33](https://github.com/user-attachments/assets/a7a38f41-0da7-4d0d-82a8-e66eed284203)
+![2025-10-26 21 37 21](https://github.com/user-attachments/assets/25201202-9ba0-46c8-bd9f-f6f5afbe1c6b)
 
 A comprehensive platform for decentralized bill splitting with Web3 integration, featuring both web and mobile applications.
 
