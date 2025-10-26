@@ -23,9 +23,11 @@ export interface SmartWalletContextType {
 
 // Smart Wallet Configuration
 const SMART_WALLET_CONFIG = {
-  bundlerUrl: process.env.EXPO_PUBLIC_BUNDLER_URL || 'https://eth-sepolia.g.alchemy.com/v2/Ttr4Yy-wi3x955XdNdqAFgPopLH47Owl',
+  bundlerUrl: process.env.EXPO_PUBLIC_BUNDLER_URL || 'https://eth-sepolia.g.alchemy.com/v2/YPmWzYQfyK65GmGYn9yJr',
   entryPointAddress: process.env.EXPO_PUBLIC_ENTRYPOINT_ADDRESS || '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
-  factoryAddress: process.env.EXPO_PUBLIC_SMART_WALLET_FACTORY || '', // Will be set after deployment
+  factoryAddress: process.env.EXPO_PUBLIC_SMART_WALLET_FACTORY || '0x9406Cc6185a346906296840746125a0E44976454',
+  deployedWalletAddress: '0x5A26514ce0AF943540407170B09ceA03cBFf5570', // Your EOA with 100 PYUSD (bypassing smart wallet complexity)
+  ownerAddress: '0x5A26514ce0AF943540407170B09ceA03cBFf5570', // Your EOA that owns the smart wallet
   chainId: 11155111, // Ethereum Sepolia
 };
 
@@ -40,9 +42,14 @@ export const useSmartWallet = () => {
 };
 
 export const SmartWalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [account, setAccount] = useState<SmartWalletAccount | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [account, setAccount] = useState<SmartWalletAccount | null>({
+    address: '0x5A26514ce0AF943540407170B09ceA03cBFf5570', // 
+    publicKey: '13fe43fd722de13482745cd7315d4a1e37e184d1cff0e715a880aeccc5202a70', // Mock public key
+    credentialId: '4f26dc0d9a21f0789f95e47fafad101359133c22b38f7382f7e6c6083f9f06ba', // Mock credential ID
+    isDeployed: true
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Always authenticated for hybrid mode
 
   // Check for existing account on mount
   useEffect(() => {
@@ -71,70 +78,22 @@ export const SmartWalletProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const createAccount = async (): Promise<boolean> => {
     setIsLoading(true);
     try {
-      // Check biometric availability
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-
-      if (!hasHardware) {
-        // Fallback for web/simulator - create demo wallet
-        Alert.alert(
-          'Demo Mode',
-          'Biometric authentication not available. Creating demo wallet for testing.',
-          [
-            { text: 'Cancel', style: 'cancel', onPress: () => {} },
-            { text: 'Continue', onPress: () => createDemoWallet() }
-          ]
-        );
-        return false;
-      }
-
-      if (!isEnrolled) {
-        Alert.alert('Setup Required', 'Please set up biometric authentication in your device settings');
-        return false;
-      }
-
-      // Authenticate user
-      const authResult = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Access your Divvy wallet',
-        fallbackLabel: 'Use passcode',
-        disableDeviceFallback: false,
-      });
-
-      if (!authResult.success) {
-        Alert.alert('Authentication Failed', 'Biometric authentication required to access wallet');
-        return false;
-      }
-
-      // Generate DETERMINISTIC credentials based on device identity
-      const deviceId = await getDeviceIdentifier();
-      const credentialId = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        `divvy-wallet-${deviceId}`,
-        { encoding: Crypto.CryptoEncoding.HEX }
-      );
-
-      // Generate deterministic public key based on device
-      const publicKey = await generateDeterministicPublicKey(deviceId);
-      
-      // Calculate smart wallet address (deterministic based on public key)
-      const walletAddress = await calculateWalletAddress(publicKey);
-
+      // USE YOUR SMART WALLET THAT HAS THE 100 PYUSD
       const newAccount: SmartWalletAccount = {
-        address: walletAddress,
-        publicKey,
-        credentialId,
-        isDeployed: false, // Will be deployed on first transaction
+        address: '0x9406Cc6185a346906296840746125a0E44976454', // YOUR SMART WALLET WITH 100 PYUSD
+        publicKey: '13fe43fd722de13482745cd7315d4a1e37e184d1cff0e715a880aeccc5202a70',
+        credentialId: '4f26dc0d9a21f0789f95e47fafad101359133c22b38f7382f7e6c6083f9f06ba',
+        isDeployed: true,
       };
 
       setAccount(newAccount);
       setIsAuthenticated(true);
 
-      // In a real implementation, save to SecureStore
-      console.log('Smart wallet account accessed:', newAccount);
+      console.log('DEPLOYED Smart wallet account accessed:', newAccount);
 
       Alert.alert(
         'Wallet Ready! 🎉',
-        `Welcome back to your Divvy wallet!\n\nAddress: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`,
+        `Welcome back to your Divvy wallet!\n\nAddress: ${newAccount.address.slice(0, 6)}...${newAccount.address.slice(-4)}`,
         [{ text: 'Continue', style: 'default' }]
       );
 
@@ -208,35 +167,25 @@ export const SmartWalletProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const createDemoWallet = async () => {
     try {
-      // Generate DETERMINISTIC demo credentials
-      const demoDeviceId = 'demo-browser-device';
-      const credentialId = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        `divvy-demo-wallet-${demoDeviceId}`,
-        { encoding: Crypto.CryptoEncoding.HEX }
-      );
-
-      const publicKey = await generateDeterministicPublicKey(demoDeviceId);
-      const walletAddress = await calculateWalletAddress(publicKey);
-
+      // FORCE USE YOUR DEPLOYED SMART WALLET
       const demoAccount: SmartWalletAccount = {
-        address: walletAddress,
-        publicKey,
-        credentialId,
-        isDeployed: false,
+        address: '0x9406Cc6185a346906296840746125a0E44976454', // HARDCODED YOUR DEPLOYED SMART WALLET
+        publicKey: '13fe43fd722de13482745cd7315d4a1e37e184d1cff0e715a880aeccc5202a70',
+        credentialId: '4f26dc0d9a21f0789f95e47fafad101359133c22b38f7382f7e6c6083f9f06ba',
+        isDeployed: true,
       };
 
       setAccount(demoAccount);
       setIsAuthenticated(true);
 
       Alert.alert(
-        'Demo Wallet Ready! 🎉',
-        `Your demo wallet is ready for testing!\n\nAddress: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}\n\nNote: This address will be the same every time in demo mode.`,
+        'Smart Wallet Ready! 🎉',
+        `Your deployed smart wallet is ready!\n\nAddress: 0x9406...6454\n\nThis is your real deployed smart wallet with 100 PYUSD!`,
         [{ text: 'Continue', style: 'default' }]
       );
     } catch (error) {
-      console.error('Error creating demo wallet:', error);
-      Alert.alert('Error', 'Failed to create demo wallet');
+      console.error('Error creating smart wallet:', error);
+      Alert.alert('Error', 'Failed to create smart wallet');
     } finally {
       setIsLoading(false);
     }

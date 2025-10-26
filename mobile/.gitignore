@@ -68,3 +68,33 @@ accounts/
 # generated native folders
 /ios
 /android
+
+# Testing scripts and development files
+scripts/test*.js
+scripts/demo*.js
+scripts/mock*.js
+scripts/dev*.js
+scripts/local*.js
+*.test.js
+*.spec.js
+test-data/
+dev-tools/
+testing/
+
+# Development and debugging
+debug.log
+*.log
+temp/
+tmp/
+.cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db

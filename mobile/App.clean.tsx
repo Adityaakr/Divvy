@@ -282,16 +282,16 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#1F2937',
-    marginBottom: 8,
+    marginBottom: 5,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 18,
     color: '#6B7280',
-    marginBottom: 32,
+    marginBottom: 30,
     textAlign: 'center',
   },
   featureGrid: {
@@ -365,7 +365,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6B7280',
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 6,
+    marginBottom: 5,
   },
   settingsContainer: {
     marginTop: 32,

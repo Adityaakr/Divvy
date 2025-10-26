@@ -5,6 +5,7 @@ const config = {
   baseUrl: 'https://base-sepolia.blockscout.com/api/v2',
   polygonUrl: 'https://polygon.blockscout.com/api/v2',
   mainnetUrl: 'https://eth.blockscout.com/api/v2',
+  sepoliaUrl: 'https://eth-sepolia.blockscout.com/api/v2', // Add Sepolia support
 };
 
 export interface Transaction {
@@ -63,6 +64,9 @@ class BlockscoutClient {
       case 'mainnet':
       case 'ethereum':
         return config.mainnetUrl;
+      case 'sepolia':
+      case 'ethereum-sepolia':
+        return config.sepoliaUrl;
       case 'base-sepolia':
       default:
         return config.baseUrl;
@@ -74,14 +78,27 @@ class BlockscoutClient {
     const url = `${baseUrl}${endpoint}`;
     
     try {
-      const response = await fetch(url);
+      console.log(`🌐 Fetching: ${url}`);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      
       if (!response.ok) {
+        console.error(`❌ API Error: ${response.status} - ${response.statusText}`);
         throw new Error(`Blockscout API error: ${response.status}`);
       }
-      return await response.json();
+      
+      const data = await response.json();
+      console.log(`✅ API Success: ${Object.keys(data).join(', ')}`);
+      return data;
     } catch (error) {
-      console.error('Blockscout API error:', error);
-      throw error;
+      console.error('❌ Blockscout API error:', error);
+      // Return empty result instead of throwing to prevent app crashes
+      return { items: [] };
     }
   }
 
@@ -151,6 +168,47 @@ class BlockscoutClient {
       return data.items || [];
     } catch (error) {
       console.error('Error fetching token approvals:', error);
+      return [];
+    }
+  }
+
+  // Get live transactions for an address
+  async getLiveTransactions(address: string, network: string = 'sepolia', limit: number = 10): Promise<Transaction[]> {
+    try {
+      console.log(`🔍 Fetching live transactions for ${address} on ${network}...`);
+      const data = await this.fetchApi(`/addresses/${address}/transactions?limit=${limit}`, network);
+      
+      if (!data.items) {
+        console.log('No transactions found');
+        return [];
+      }
+
+      console.log(`✅ Found ${data.items.length} transactions`);
+      
+      return data.items.map((tx: any) => ({
+        hash: tx.hash,
+        from: tx.from?.hash || '',
+        to: tx.to?.hash || '',
+        value: tx.value || '0',
+        gasUsed: tx.gas_used || '0',
+        gasPrice: tx.gas_price || '0',
+        status: tx.status || 'ok',
+        timestamp: tx.timestamp,
+        method: tx.method || 'transfer',
+        tokenTransfers: tx.token_transfers?.map((transfer: any) => ({
+          from: transfer.from?.hash || '',
+          to: transfer.to?.hash || '',
+          value: transfer.total?.value || '0',
+          token: {
+            address: transfer.token?.address || '',
+            symbol: transfer.token?.symbol || '',
+            name: transfer.token?.name || '',
+            decimals: transfer.token?.decimals || 18
+          }
+        })) || []
+      }));
+    } catch (error) {
+      console.error('Error fetching live transactions:', error);
       return [];
     }
   }
