@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# 🚀 Divvy - Complete DeFi Bill Splitting Platform
 
-## Project info
+**Split bills seamlessly, settle with PYUSD, and optimize yields via AI agents across chains**
 
-**URL**: https://lovable.dev/projects/635120cd-b1c4-4798-80fd-0be109867b5d
+A comprehensive platform for decentralized bill splitting with Web3 integration, featuring both web and mobile applications.
 
-## How can I edit this code?
+## 📱 Mobile App (Primary)
 
-There are several ways of editing your application.
+The main application is a **React Native/Expo mobile app** located in the `/mobile` directory.
 
-**Use Lovable**
+### Features:
+- 💸 **Smart bill splitting** with PYUSD on Arbitrum Sepolia
+- 🤖 **AI-powered savings optimization** with ASI agents
+- 🔍 **Live blockchain explorer** with Blockscout integration
+- 📱 **Modern mobile UI/UX** with professional design
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/635120cd-b1c4-4798-80fd-0be109867b5d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Quick Start:
+```bash
+cd mobile
+npm install
+npx expo start
 ```
 
-**Edit a file directly in GitHub**
+## 🌐 Web Components
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+Additional web components and utilities for the platform built with:
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## 🏗️ Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/635120cd-b1c4-4798-80fd-0be109867b5d) and click on Share -> Publish.
+```
+├── mobile/                 # 📱 React Native/Expo Mobile App
+│   ├── App.tsx            # Main mobile app entry
+│   ├── src/               # Mobile app source code
+│   ├── assets/            # Mobile app assets
+│   └── package.json       # Mobile dependencies
+├── src/                   # 🌐 Web components
+├── public/                # Web assets
+└── package.json          # Root dependencies
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 🚀 Getting Started
 
-Yes, you can!
+### Mobile App (Primary):
+```bash
+cd mobile
+npm install
+cp .env.example .env
+# Configure your environment variables
+npx expo start
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Web Components:
+```bash
+npm install
+npm run dev
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🔐 Security
+
+- Environment variables are gitignored
+- Private keys never committed
+- Comprehensive .gitignore for sensitive files
+- .env.example templates provided
+
+## 📄 License
+
+MIT License
+
+---
+
+**Built with ❤️ for the DeFi community**

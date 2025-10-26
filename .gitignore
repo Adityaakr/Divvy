@@ -12,6 +12,38 @@ dist
 dist-ssr
 *.local
 
+# Environment files and sensitive credentials
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env*.local
+
+# API Keys and Secrets
+**/secrets/
+**/keys/
+*.secret
+*.credentials
+config/secrets.json
+config/keys.json
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.p8
+*.jks
+*.keystore
+private-key.txt
+mnemonic.txt
+
+# Blockchain/Crypto related
+wallet.json
+keystore/
+accounts/
+*.wallet
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
